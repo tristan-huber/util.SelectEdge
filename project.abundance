@@ -59,8 +59,8 @@
         }
       ],
       "interpreterVersion": 1,
-      "code": "\nfunction run(\n  shape: Assembly,\n  edgeIndex: number = 0\n) {\n  let result : replicad.Edge;\n  shape.onLeafs((leaf) => {\n    if (leaf.is3D()) {\n      const f = leaf.geometry.edges\n      console.log(f)\n      if (f.length > edgeIndex && result == undefined) {\n        result = f[edgeIndex]\n      } else {\n        edgeIndex = edgeIndex - f.length\n      }\n      return leaf;\n    }\n  })\n  return replicad.assembleWire([result]);\n}\n",
-      "compiledCode": "\"use strict\";\nfunction run(shape, edgeIndex = 0) {\n    let result;\n    shape.onLeafs((leaf) => {\n        if (leaf.is3D()) {\n            const f = leaf.geometry.edges;\n            console.log(f);\n            if (f.length > edgeIndex && result == undefined) {\n                result = f[edgeIndex];\n            }\n            else {\n                edgeIndex = edgeIndex - f.length;\n            }\n            return leaf;\n        }\n    });\n    return replicad.assembleWire([result]);\n}\n"
+      "code": "\nfunction run(\n  shape: Assembly,\n  edgeIndex: number = 0\n) {\n  let result : replicad.Edge;\n  shape.onLeafs((leaf) => {\n    if (leaf.is3D() || leaf.geometry instanceof replicad.Face) {\n      const f = leaf.geometry.edges\n      if (f.length > edgeIndex && result == undefined) {\n        result = f[edgeIndex]\n      } else {\n        edgeIndex = edgeIndex - f.length\n      }\n      return leaf;\n    }\n  })\n  return replicad.assembleWire([result]);\n}\n",
+      "compiledCode": "\"use strict\";\nfunction run(shape, edgeIndex = 0) {\n    let result;\n    shape.onLeafs((leaf) => {\n        if (leaf.is3D() || leaf.geometry instanceof replicad.Face) {\n            const f = leaf.geometry.edges;\n            if (f.length > edgeIndex && result == undefined) {\n                result = f[edgeIndex];\n            }\n            else {\n                edgeIndex = edgeIndex - f.length;\n            }\n            return leaf;\n        }\n    });\n    return replicad.assembleWire([result]);\n}\n"
     },
     {
       "atomType": "Rectangle",
@@ -208,6 +208,11 @@
   ],
   "allConnectors": [
     {
+      "ap2Name": "shape",
+      "ap1ID": "id-4",
+      "ap2ID": "id-10"
+    },
+    {
       "ap2Name": "edgeIndex",
       "ap1ID": "id-7",
       "ap2ID": "id-10"
@@ -226,11 +231,6 @@
       "ap2Name": "shape",
       "ap1ID": "id-26",
       "ap2ID": "id-35"
-    },
-    {
-      "ap2Name": "shape",
-      "ap1ID": "id-35",
-      "ap2ID": "id-10"
     }
   ],
   "unitsKey": "Unitless",

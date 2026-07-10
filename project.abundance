@@ -30,16 +30,16 @@
     },
     {
       "atomType": "Input",
-      "x": 0.0231,
-      "y": 0.14,
+      "x": 0.025384615384615384,
+      "y": 0.15384615384615385,
       "uniqueID": "id-4",
       "name": "shape",
       "type": "geometry"
     },
     {
       "atomType": "Input",
-      "x": 0.0231,
-      "y": 0.22400000000000003,
+      "x": 0.025384615384615384,
+      "y": 0.24615384615384617,
       "uniqueID": "id-7",
       "name": "index"
     },
@@ -126,16 +126,16 @@
         },
         {
           "atomType": "Input",
-          "x": 0.0231,
-          "y": 0.14,
+          "x": 0.025384615384615384,
+          "y": 0.15384615384615385,
           "uniqueID": "id-32",
           "name": "shape",
           "type": "geometry"
         },
         {
           "atomType": "Input",
-          "x": 0.0231,
-          "y": 0.22400000000000003,
+          "x": 0.025384615384615384,
+          "y": 0.24615384615384617,
           "uniqueID": "id-33",
           "name": "index"
         },
@@ -204,6 +204,27 @@
       "unitsKey": "Unitless",
       "fileTypeVersion": 1,
       "lastReloadedFromGithubAt": 1781804440580
+    },
+    {
+      "atomType": "Code",
+      "x": 0.45742187500000003,
+      "y": 0.7548701298701299,
+      "uniqueID": "id-63",
+      "ioValues": [
+        {
+          "name": "shape",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "edgeIndexes",
+          "ioValue": [
+            0
+          ]
+        }
+      ],
+      "interpreterVersion": 1,
+      "code": "\nfunction run(\n  shape: Assembly,\n  edgeIndexes: number[] = [0]\n) {\n  let result : replicad.Edge;\n  shape.onLeafs((leaf) => {\n    if (leaf.is3D() || leaf.geometry instanceof replicad.Face) {\n      const f = leaf.geometry.edges\n      if (f.length > edgeIndex && result == undefined) {\n        result = f[edgeIndex]\n      } else {\n        edgeIndex = edgeIndex - f.length\n      }\n      return leaf;\n    }\n  })\n  return replicad.assembleWire([result]);\n}\n",
+      "compiledCode": "\"use strict\";\nfunction run(shape, edgeIndexes = [0]) {\n    let result;\n    shape.onLeafs((leaf) => {\n        if (leaf.is3D() || leaf.geometry instanceof replicad.Face) {\n            const f = leaf.geometry.edges;\n            if (f.length > edgeIndex && result == undefined) {\n                result = f[edgeIndex];\n            }\n            else {\n                edgeIndex = edgeIndex - f.length;\n            }\n            return leaf;\n        }\n    });\n    return replicad.assembleWire([result]);\n}\n"
     }
   ],
   "allConnectors": [
@@ -231,6 +252,11 @@
       "ap2Name": "shape",
       "ap1ID": "id-26",
       "ap2ID": "id-35"
+    },
+    {
+      "ap2Name": "shape",
+      "ap1ID": "id-26",
+      "ap2ID": "id-63"
     }
   ],
   "unitsKey": "Unitless",

@@ -7,7 +7,7 @@
 ## Inputs
 
 - **shape** (geometry)
-- **index** (array)
+- **index** (number)
 
 
 

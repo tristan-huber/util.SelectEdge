@@ -42,7 +42,7 @@
       "y": 0.24615384615384617,
       "uniqueID": "id-7",
       "name": "index",
-      "type": "array"
+      "type": "number"
     },
     {
       "atomType": "Code",
@@ -94,6 +94,27 @@
           "ioValue": 10
         }
       ]
+    },
+    {
+      "atomType": "Code",
+      "x": 0.446484375,
+      "y": 0.7077922077922079,
+      "uniqueID": "id-63",
+      "ioValues": [
+        {
+          "name": "shape",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "edgeIndexes",
+          "ioValue": [
+            0
+          ]
+        }
+      ],
+      "interpreterVersion": 1,
+      "code": "function run(\n  shape: Assembly,\n  edgeIndexes: number[] = [0]) {\n  let result: replicad.Edge[] = [];\n  shape.onLeafs((leaf) => {\n    let edges = []\n    if (leaf.geometry instanceof replicad.Drawing) {\n      const sketches = leaf.geometry.sketchOnPlane(leaf.plane)\n      let faces = []\n      if (sketches instanceof replicad.Sketches) {\n        const t = sketches.faces()\n        faces = t instanceof replicad.Face ? [t] : t.faces\n      } else {\n        faces = [sketches.face()]\n      }\n      edges = faces.map((f) => f.edges).flat()\n    } else {\n      edges = leaf.geometry.edges\n    }\n    result.push(...\n      edgeIndexes.filter((i) => i >= 0 && i < edges.length).map((i) => {\n        return edges[i]\n      }))\n    edgeIndexes = edgeIndexes.map((i) => i - edges.length)\n  })\n  console.log(result)\n  return result.map((edge) => replicad.assembleWire([edge]));\n}\n",
+      "compiledCode": "\"use strict\";\nfunction run(shape, edgeIndexes = [0]) {\n    let result = [];\n    shape.onLeafs((leaf) => {\n        let edges = [];\n        if (leaf.geometry instanceof replicad.Drawing) {\n            const sketches = leaf.geometry.sketchOnPlane(leaf.plane);\n            let faces = [];\n            if (sketches instanceof replicad.Sketches) {\n                const t = sketches.faces();\n                faces = t instanceof replicad.Face ? [t] : t.faces;\n            }\n            else {\n                faces = [sketches.face()];\n            }\n            edges = faces.map((f) => f.edges).flat();\n        }\n        else {\n            edges = leaf.geometry.edges;\n        }\n        result.push(...edgeIndexes.filter((i) => i >= 0 && i < edges.length).map((i) => {\n            return edges[i];\n        }));\n        edgeIndexes = edgeIndexes.map((i) => i - edges.length);\n    });\n    console.log(result);\n    return result.map((edge) => replicad.assembleWire([edge]));\n}\n"
     },
     {
       "atomType": "GitHubMolecule",
@@ -205,25 +226,6 @@
       "unitsKey": "Unitless",
       "fileTypeVersion": 1,
       "lastReloadedFromGithubAt": 1781804440580
-    },
-    {
-      "atomType": "Code",
-      "x": 0.446484375,
-      "y": 0.7077922077922079,
-      "uniqueID": "id-63",
-      "ioValues": [
-        {
-          "name": "shape",
-          "ioValue": "__GEOMETRY_INPUT__"
-        },
-        {
-          "name": "edgeIndexes",
-          "ioValue": 0
-        }
-      ],
-      "interpreterVersion": 1,
-      "code": "function run(\n  shape: Assembly,\n  edgeIndexes: number[] = [0]) {\n  let result: replicad.Edge[] = [];\n  shape.onLeafs((leaf) => {\n    let edges = []\n    if (leaf.geometry instanceof replicad.Drawing) {\n      const sketches = leaf.geometry.sketchOnPlane(leaf.plane)\n      let faces = []\n      if (sketches instanceof replicad.Sketches) {\n        const t = sketches.faces()\n        faces = t instanceof replicad.Face ? [t] : t.faces\n      } else {\n        faces = [sketches.face()]\n      }\n      edges = faces.map((f) => f.edges).flat()\n    } else {\n      edges = leaf.geometry.edges\n    }\n    result.push(...\n      edgeIndexes.filter((i) => i >= 0 && i < edges.length).map((i) => {\n        return edges[i]\n      }))\n    edgeIndexes = edgeIndexes.map((i) => i - edges.length)\n  })\n  console.log(result)\n  return result.map((edge) => replicad.assembleWire([edge]));\n}\n",
-      "compiledCode": "\"use strict\";\nfunction run(shape, edgeIndexes = [0]) {\n    let result = [];\n    shape.onLeafs((leaf) => {\n        let edges = [];\n        if (leaf.geometry instanceof replicad.Drawing) {\n            const sketches = leaf.geometry.sketchOnPlane(leaf.plane);\n            let faces = [];\n            if (sketches instanceof replicad.Sketches) {\n                const t = sketches.faces();\n                faces = t instanceof replicad.Face ? [t] : t.faces;\n            }\n            else {\n                faces = [sketches.face()];\n            }\n            edges = faces.map((f) => f.edges).flat();\n        }\n        else {\n            edges = leaf.geometry.edges;\n        }\n        result.push(...edgeIndexes.filter((i) => i >= 0 && i < edges.length).map((i) => {\n            return edges[i];\n        }));\n        edgeIndexes = edgeIndexes.map((i) => i - edges.length);\n    });\n    console.log(result);\n    return result.map((edge) => replicad.assembleWire([edge]));\n}\n"
     }
   ],
   "allConnectors": [
@@ -243,9 +245,9 @@
       "ap2ID": "id-10"
     },
     {
-      "ap2Name": "edgeIndexes",
-      "ap1ID": "id-7",
-      "ap2ID": "id-63"
+      "ap2Name": "number or geometry",
+      "ap1ID": "id-10",
+      "ap2ID": "id-2"
     },
     {
       "ap2Name": "geometry",
@@ -256,11 +258,6 @@
       "ap2Name": "shape",
       "ap1ID": "id-26",
       "ap2ID": "id-35"
-    },
-    {
-      "ap2Name": "number or geometry",
-      "ap1ID": "id-63",
-      "ap2ID": "id-2"
     }
   ],
   "unitsKey": "Unitless",
